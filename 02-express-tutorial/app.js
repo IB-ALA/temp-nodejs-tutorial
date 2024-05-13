@@ -1,58 +1,40 @@
-const http = require('http');
-const { readFileSync } = require('fs');
+const express = require('express');
 
-// get all files
-// const homePage = readFileSync('./index.html', 'utf8');
-const homePage = readFileSync('./navbar-app/index.html', 'utf8')
-const homeStyles = readFileSync('./navbar-app/styles.css', 'utf8')
-const homeImage = readFileSync('./navbar-app/logo.svg', 'utf8')
-const homeLogic = readFileSync('./navbar-app/browser-app.js', 'utf8')
+// you can as well do it this way
+// const app = require('express')();
 
-const server = http.createServer((request, response) => {
-  // console.log(request.method);
-  // console.log(request.url);
-  
-  const url = request.url;
+const app = express();
 
-  // home page
-  if (url === '/') {
-    response.writeHead(200, {'content-type': 'text/html'});
-    // response.writeHead(404, {'content-type': 'text/plain'});
-    response.write(homePage);
-    response.end();
-  }
-  // about page
-  else if (url === '/about') {
-    response.writeHead(200, {'content-type': 'text/html'});
-    response.write('<h1>About page</h1>');
-    response.end();
-  }
-  // styles
-  else if (url === '/styles.css') {
-    response.writeHead(200, {'content-type': 'text/css'});
-    response.write(homeStyles);
-    response.end();
-  }
-  // logo
-  else if (url === '/logo.svg') {
-    response.writeHead(200, {'content-type': 'image/svg+xml'});
-    response.write(homeImage);
-    response.end();
-  }
-  // logic
-  else if (url === '/browser-app.js') {
-    response.writeHead(200, {'content-type': 'text/js'});
-    response.write(homeLogic);
-    response.end();
-  }
-  // 404
-  else {
-    response.writeHead(404, {'content-type': 'text/html'});
-    response.write('<h1>Page not found</h1>');
-    response.end();
-  }
-  
-
+app.get('/', (req, res) => {
+  console.log('user hit the resource');
+  res.status(200).send('home page');
 });
 
-server.listen(5000);
+app.get('/about', (req, res) => {
+  console.log('user hit the resource');
+  res.status(200).send('About page');
+});
+
+app.all('*', (req, res) => {
+  console.log('user hit the resource');
+  res.status(404).send('<h1>resource not found</h1>');
+});
+
+
+
+
+
+
+app.listen(5000, () => {
+  console.log('Server is listening on port 5000');
+});
+
+// 4:55:10-14
+
+// app.get
+// app.post
+// app.put
+// app.delete
+// app.all
+// app.use
+// app.listen
