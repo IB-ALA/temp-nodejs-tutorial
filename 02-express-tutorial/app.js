@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 
-const { products, people } = require('./data');
+const { products } = require('./data');
 
 app.get('/', (req, res) => {
   // res.json([{name: 'john'}, {name: 'susan'}]);
@@ -20,6 +20,27 @@ app.get('/api/products', (req, res) => {
   res.json(newProducts);
 });
 
+
+// ROUTE PARAMS
+app.get('/api/products/:productId', (req, res) => {
+  // console.log(req);
+  // console.log(req.params);
+
+  const { productId } = req.params;
+
+  const singleProduct = products.find((product) => product.id === Number(productId));
+
+  if (!singleProduct) {
+    return res.status(404).send('Product not found');
+  }
+
+  res.json(singleProduct);
+});
+
+app.get('/api/products/:productId/reviews/:reviewId', (req, res) => {
+  console.log(req.params)
+  res.send('hello world')
+})
 
 app.listen(5000, () => {
   console.log('Server listeing on port 5000...');
