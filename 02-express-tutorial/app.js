@@ -38,8 +38,34 @@ app.get('/api/products/:productId', (req, res) => {
 });
 
 app.get('/api/products/:productId/reviews/:reviewId', (req, res) => {
-  console.log(req.params)
+  // console.log(req.params)
   res.send('hello world')
+})
+
+// QUERY STRINGS
+app.get('/api/v1/query', (req, res) => {
+  // console.log(req.query)
+
+  const { search, limit } = req.query
+  let sortedProducts = [...products]
+
+  if (search) {
+    sortedProducts = sortedProducts.filter(product => {
+      return product.name.startsWith(search)
+    })
+  }
+
+  if (limit) {
+    sortedProducts = sortedProducts.slice(0, Number(limit));
+  }
+
+  if (sortedProducts.length === 0) {
+    // res.status(200).send('No product matches')
+
+    return res.status(200).json({ success: true, data: [] });
+  }
+
+  res.status(200).json(sortedProducts)
 })
 
 app.listen(5000, () => {
