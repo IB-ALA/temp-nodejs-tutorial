@@ -1,71 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-let { people } = require('../data');
+const { getPeople, craetePerson, createPersonPostman, updatePerson, deletePerson } = require('../Controllers/prople');
 
 
 
-router.get('/', (req, res) => {
-  res.status(200).json({success: true, data: people});
-});
+// router.get('/', getPeople);
 
-router.post('/', (req, res) => {
-  const { name } = req.body;
+// router.post('/', craetePerson);
 
-  if (!name) {
-    return res
-    .status(400)
-    .json({ success: false, msg: 'please provide name value'})
-    
-  }
-  res.status(201).json({ success: true, person: name })
-});
+// router.post('/postman', createPersonPostman);
 
-router.post('/postman', (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res
-    .status(400)
-    .json({ success: false, msg: 'please provide name value'});
-  }
+// router.put('/:id', updatePerson);
 
-  res.status(201).json({ success: true, data: [...people, name] });
-});
+// router.delete('/:id', deletePerson);
 
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
 
-  const person = people.find(person => person.id === Number(id));
-  if (!person) {
-    return res
-    .status(404)
-    .json({ success: false, msg: `no person with id ${id}`})
-  }
+// YOU CAN AS WELL USE THE MOTHOD CHAINING TO SET UP THE ROUTER.
+router.route('/').get(getPeople).post(craetePerson);
 
-  const newPeople = people.map(person => {
-    if (person.id === Number(id)) {
-      person.name = name;
-    }
-    return person;
-  })
-  res.status(200).json({ success: true, data: newPeople });
-});
+router.route('/postman').post(createPersonPostman)
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const person = people.find(person => person.id === Number(id));
-
-  if (!person) {
-    return res
-    .status(404)
-    .json({ success: false, msg: `no person with id ${id}` });
-  }
-
-  const newPeople = people.filter(person => person.id !== Number(id));
-
-  res.status(200).json(newPeople);
-});
-
+router.route('/:id').put(updatePerson).delete(deletePerson)
 
 module.exports = router;
