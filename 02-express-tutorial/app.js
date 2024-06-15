@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const people = require('./routes/people');
 const auth = require('./routes/auth');
@@ -12,7 +13,10 @@ app.use(express.static('./methods-public'));
 app.use(express.urlencoded({ extended: false }));
 
 // parse json
-app.use(express.json())
+app.use(express.json());
+
+// allow other sources
+app.use(cors());
 
 // for router
 app.use('/api/people', people);
